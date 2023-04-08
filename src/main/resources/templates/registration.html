@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Регистрация</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
 <h3>Регистрация</h3>
@@ -17,7 +18,7 @@
     <input type="password" th:field="*{password}" id="password">
     <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
     <br>
-    <input type="submit" value="Зарегистрироваться">
+    <button type="submit">Зарегистрироваться</button>
 </form>
 <a href="/authentication">Вход</a>
 </body>

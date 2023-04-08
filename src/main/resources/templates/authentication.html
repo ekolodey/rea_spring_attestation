@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Аутентификация</title>
-    <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
 <h3>Вход</h3>
@@ -15,7 +15,7 @@
     <br>
     <label for="password">Введите пароль: </label>
     <input type="password" placeholder="Введите пароль" name="password" id="password">
-    <input type="submit" value="Войти">
+    <button type="submit">Войти</button>
 </form>
 <div th:if="${param.error}" style="color: red">
     Неправильный логин или пароль
