@@ -3,7 +3,6 @@ package com.ekolodey.spring_attestation.controllers;
 import com.ekolodey.spring_attestation.enumm.Status;
 import com.ekolodey.spring_attestation.models.Cart;
 import com.ekolodey.spring_attestation.models.Order;
-import com.ekolodey.spring_attestation.models.Person;
 import com.ekolodey.spring_attestation.models.Product;
 import com.ekolodey.spring_attestation.repositories.CartRepository;
 import com.ekolodey.spring_attestation.repositories.OrderRepository;
@@ -12,12 +11,10 @@ import com.ekolodey.spring_attestation.security.PersonDetails;
 import com.ekolodey.spring_attestation.services.PersonService;
 import com.ekolodey.spring_attestation.services.ProductService;
 import com.ekolodey.spring_attestation.util.PersonValidator;
-import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -65,31 +62,18 @@ public class MainController {
         return "/user/index";
     }
 
-    //    @GetMapping("/registration")
+    //    @GetMapping("/user/register")
 //    public String registration(Model model){
 //        model.addAttribute("person", new Person());
 //        return "registration";
 //    }
 
-    @GetMapping("/registration")
-    public String registration(@ModelAttribute("person") Person person){
-        return "registration";
-    }
 
-    @PostMapping("/registration")
-    public String resultRegistration(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult){
-        personValidator.validate(person, bindingResult);
-        if(bindingResult.hasErrors()){
-            return "registration";
-        }
-        personService.register(person);
-        return "redirect:/person account";
-    }
 
     @GetMapping("/person account/product/info/{id}")
     public String infoProduct(@PathVariable("id") int id, Model model){
         model.addAttribute("product", productService.getProductId(id));
-        return "/user/infoProduct";
+        return "product/info";
     }
 
     @PostMapping("/person account/product/search")

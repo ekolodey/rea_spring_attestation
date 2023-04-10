@@ -8,8 +8,9 @@
 </head>
 <body>
 <h3>Редактирование товара</h3>
+
 <form th:method="POST" th:action="@{/admin/product/edit/{id}(id=${product.getId()})}" th:object="${product}" enctype="multipart/form-data">
-    <label for="title">Введите наименование товара: </label>
+    <label for="title">Наименование товара: </label>
     <input type="text" th:field="*{title}" placeholder="Наименование" id="title">
     <div style="color: red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
 
@@ -37,7 +38,18 @@
     <textarea th:field="*{seller}" placeholder="Продавец" id="seller"></textarea>
     <div style="color: red" th:if="${#fields.hasErrors('seller')}" th:errors="*{seller}"></div>
 
-    <button type="submit">Редактировать</button>
+
+    <div th:each="img : ${product.getImageList()}">
+        <img th:src="'/img/' + ${img.getFileName()}" style="width: 100px">
+    </div>
+
+    <button type="submit">Отредактировать</button>
 </form>
+
+<ul>
+    <li><a th:href="@{/admin/product/delete/{id}(id=${product.getId()})}">Удалить</a></li>
+    <li><a th:href="@{/product/info/{id}(id=${product.getId()})}">Просмотр</a></li>
+    <li><a th:href="@{/admin}">Назад</a></li>
+</ul>
 </body>
 </html>

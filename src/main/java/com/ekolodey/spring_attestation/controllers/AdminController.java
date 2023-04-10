@@ -36,7 +36,7 @@ public class AdminController {
     public String addProduct(Model model){
         model.addAttribute("product", new Product());
         model.addAttribute("category", categoryRepository.findAll());
-        return "product/addProduct";
+        return "product/add";
     }
 
     @PostMapping("/admin/product/add")
@@ -45,81 +45,44 @@ public class AdminController {
         System.out.println(category_db.getName());
         if(bindingResult.hasErrors()){
             model.addAttribute("category", categoryRepository.findAll());
-            return "product/addProduct";
+            return "product/add";
         }
 
-        if(file_one != null){
-            File uploadDir = new File(uploadPath);
-            if(!uploadDir.exists()){
-                uploadDir.mkdir();
-            }
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + file_one.getOriginalFilename();
-            file_one.transferTo(new File(uploadPath + "/" + resultFileName));
-            Image image = new Image();
-            image.setProduct(product);
-            image.setFileName(resultFileName);
-            product.addImageToProduct(image);
-
+        if(!file_one.isEmpty()){
+            uploadImage(product, file_one);
         }
 
-        if(file_two != null){
-            File uploadDir = new File(uploadPath);
-            if(!uploadDir.exists()){
-                uploadDir.mkdir();
-            }
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + file_two.getOriginalFilename();
-            file_two.transferTo(new File(uploadPath + "/" + resultFileName));
-            Image image = new Image();
-            image.setProduct(product);
-            image.setFileName(resultFileName);
-            product.addImageToProduct(image);
+        if(!file_two.isEmpty()){
+            uploadImage(product, file_two);
         }
 
-        if(file_three != null){
-            File uploadDir = new File(uploadPath);
-            if(!uploadDir.exists()){
-                uploadDir.mkdir();
-            }
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + file_three.getOriginalFilename();
-            file_three.transferTo(new File(uploadPath + "/" + resultFileName));
-            Image image = new Image();
-            image.setProduct(product);
-            image.setFileName(resultFileName);
-            product.addImageToProduct(image);
+        if(!file_three.isEmpty()){
+            uploadImage(product, file_three);
         }
 
-        if(file_four != null){
-            File uploadDir = new File(uploadPath);
-            if(!uploadDir.exists()){
-                uploadDir.mkdir();
-            }
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + file_four.getOriginalFilename();
-            file_four.transferTo(new File(uploadPath + "/" + resultFileName));
-            Image image = new Image();
-            image.setProduct(product);
-            image.setFileName(resultFileName);
-            product.addImageToProduct(image);
+        if(!file_four.isEmpty()){
+            uploadImage(product, file_four);
         }
 
-        if(file_five != null){
-            File uploadDir = new File(uploadPath);
-            if(!uploadDir.exists()){
-                uploadDir.mkdir();
-            }
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + file_five .getOriginalFilename();
-            file_five .transferTo(new File(uploadPath + "/" + resultFileName));
-            Image image = new Image();
-            image.setProduct(product);
-            image.setFileName(resultFileName);
-            product.addImageToProduct(image);
+        if(!file_five.isEmpty()){
+            uploadImage(product, file_five);
         }
         productService.saveProduct(product, category_db);
         return "redirect:/admin";
+    }
+
+    private void uploadImage(Product product, MultipartFile file_one) throws IOException {
+        File uploadDir = new File(uploadPath);
+        if(!uploadDir.exists()){
+            uploadDir.mkdir();
+        }
+        String uuidFile = UUID.randomUUID().toString();
+        String resultFileName = uuidFile + "." + file_one.getOriginalFilename();
+        file_one.transferTo(new File(uploadDir + "/" + resultFileName).getAbsoluteFile());
+        Image image = new Image();
+        image.setProduct(product);
+        image.setFileName(resultFileName);
+        product.addImageToProduct(image);
     }
 
 
@@ -140,7 +103,7 @@ public class AdminController {
     public String editProduct(Model model, @PathVariable("id") int id){
         model.addAttribute("product", productService.getProductId(id));
         model.addAttribute("category", categoryRepository.findAll());
-        return "product/editProduct";
+        return "product/edit";
 
 
     }
@@ -149,9 +112,10 @@ public class AdminController {
     public String editProduct(@ModelAttribute("product") @Valid Product product, BindingResult bindingResult, @PathVariable("id") int id, Model model){
         if(bindingResult.hasErrors()){
             model.addAttribute("category", categoryRepository.findAll());
-            return "product/editProduct";
+            return "product/edit";
         }
         productService.updateProduct(id, product);
         return "redirect:/admin";
     }
+
 }

@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/product")
 public class ProductController {
 
     private final ProductRepository productRepository;
@@ -18,19 +17,19 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public String getAllProduct(Model model){
         model.addAttribute("products", productService.getAllProduct());
-        return "/product/product";
+        return "/main";
     }
 
-    @GetMapping("/info/{id}")
+    @GetMapping("/product/info/{id}")
     public String infoProduct(@PathVariable("id") int id, Model model){
         model.addAttribute("product", productService.getProductId(id));
-        return "/product/infoProduct";
+        return "/product/info";
     }
 
-    @PostMapping("/search")
+    @PostMapping("/product/search")
     public String productSearch(@RequestParam("search") String search, @RequestParam("ot") String ot, @RequestParam("do") String Do, @RequestParam(value = "price", required = false, defaultValue = "") String price, @RequestParam(value = "contract", required = false, defaultValue = "")String contract, Model model){
         model.addAttribute("products", productService.getAllProduct());
 
@@ -72,7 +71,7 @@ public class ProductController {
         model.addAttribute("value_search", search);
         model.addAttribute("value_price_ot", ot);
         model.addAttribute("value_price_do", Do);
-        return "/product/product";
+        return "/product/search";
 
     }
 }

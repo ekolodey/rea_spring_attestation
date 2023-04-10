@@ -20,9 +20,8 @@ public class PersonService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Person findByLogin(Person person){
-        Optional<Person> person_db = personRepository.findByLogin(person.getLogin());
-        return person_db.orElse(null);
+    public Person findByLogin(String login){
+        return personRepository.findByLogin(login).orElse(null);
     }
 
     @Transactional
