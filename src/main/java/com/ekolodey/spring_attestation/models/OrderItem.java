@@ -9,6 +9,7 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Order order;
 

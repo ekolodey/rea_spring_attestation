@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Cписок товаров</title>
@@ -7,11 +7,12 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h1>Главная страница магазина</h1>
+    <h1>Список товаров</h1>
 
     <ul>
-        <li><a href="user/login">Вход</a></li>
-        <li><a href="user/register">Регистрация</a></li>
+        <li sec:authorize="isAnonymous()"><a href="user/login">Вход</a></li>
+        <li sec:authorize="isAnonymous()"><a href="user/register">Регистрация</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a href="admin/product/add">Добавить товар</a></li>
     </ul>
     <h3>Cортировка, поиск, фильтрация</h3>
     <form th:method="POST" th:action="@{/product/search}">

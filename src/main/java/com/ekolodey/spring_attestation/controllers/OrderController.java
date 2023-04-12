@@ -6,6 +6,7 @@ import com.ekolodey.spring_attestation.repositories.CartRepository;
 import com.ekolodey.spring_attestation.repositories.OrderRepository;
 import com.ekolodey.spring_attestation.security.PersonDetails;
 import com.ekolodey.spring_attestation.services.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,19 +14,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.*;
-
-import static java.util.stream.Collectors.groupingBy;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 @Controller
-public class CartController {
+public class OrderController {
 
     private final CartRepository cartRepository;
 
     private final OrderRepository orderRepository;
     private final ProductService productService;
 
-    public CartController(CartRepository cartRepository, OrderRepository orderRepository, ProductService productService) {
+    public OrderController(CartRepository cartRepository, OrderRepository orderRepository, ProductService productService) {
         this.cartRepository = cartRepository;
         this.orderRepository = orderRepository;
         this.productService = productService;
@@ -114,10 +115,23 @@ public class CartController {
     }
 
     @GetMapping("/orders")
-    public String orderUser(Model model){
-        List<Order> orders = orderRepository.findByPerson(getPerson());
+    public String orderUser(Model model, HttpServletRequest request){
+        List<Order> orders;
+
+        if(request.isUserInRole("ADMIN"))
+            orders = orderRepository.findAll();
+        else
+            orders = orderRepository.findByPerson(getPerson());
 
         model.addAttribute("orders", orders);
-        return "/user/orders";
+        return "order/list";
+    }
+
+    @GetMapping("/order/{id}")
+    public String orderUser(@PathVariable("id") String orderId, Model model){
+        Order order = orderRepository.findByNumber(orderId);
+
+        model.addAttribute("order", order);
+        return "order/info";
     }
 }

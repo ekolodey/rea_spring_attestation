@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Заказ №' + ${order.getNumber()}"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
+</head>
+<body>
+    <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
+
+    <p th:text="'Cтатус: ' + ${order.getStatus()}">
+    <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
+    <p th:text="'Сумма заказа: ' + ${order.getTotalPrice()}"></p>
+
+    <div th:each="item: ${order.getItems()}" th:with="product=${item.getProduct()}">
+        <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px">
+        <p th:text="'Наименование: ' + ${product.getTitle()}">
+        <p th:text="'Количество: ' + ${item.getCount()}">
+        <p th:text="'Цена: ' + ${item.getPrice()}">
+    </div>
+</body>
+</html>

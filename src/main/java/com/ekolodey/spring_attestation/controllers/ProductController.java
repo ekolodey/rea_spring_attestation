@@ -17,10 +17,10 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/")
-    public String getAllProduct(Model model){
+    @GetMapping("/products")
+    public String list(Model model){
         model.addAttribute("products", productService.getAllProduct());
-        return "/main";
+        return "product/list";
     }
 
     @GetMapping("/product/info/{id}")

@@ -21,6 +21,10 @@ public class MainController {
         this.productService = productService;
     }
 
+    @GetMapping("/")
+    public String main(){
+        return "redirect:/products";
+    }
     @GetMapping("/person account")
     public String index(Model model){
         // Получаем объект аутентификации -> с помощью SpringContextHolder обращаемся к контексту и на нем вызываем метод аутентификации. Из сессии текущего пользователя получаем объект, который был положен в данную сессию после аутентификации пользователя
