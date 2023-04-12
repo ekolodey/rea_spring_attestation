@@ -7,15 +7,19 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-<h3>Заказы</h3>
-<div th:each="order : ${orders}">
-    <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
-    <img th:src="'/img/' + ${order.getProduct().getImageList()[0].getFileName()}" width="300px">
-    <p th:text="'Наименование: ' + ${order.getProduct().getTitle()}">
-    <p th:text="'Количество: ' + ${order.getCount()}">
-    <p th:text="'Цена: ' + ${order.getPrice()}">
-    <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
-    <p th:text="'Cтатус: ' + ${order.getStatus()}">
-</div>
+    <h3>Заказы</h3>
+    <div th:each="order : ${orders}">
+        <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
+        <p th:text="'Cтатус: ' + ${order.getStatus()}">
+        <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
+        <p th:text="'Сумма заказа: ' + ${order.getTotalPrice()}"></p>
+
+        <div th:each="item: ${order.getItems()}" th:with="product=${item.getProduct()}">
+            <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px">
+            <p th:text="'Наименование: ' + ${product.getTitle()}">
+            <p th:text="'Количество: ' + ${item.getCount()}">
+            <p th:text="'Цена: ' + ${item.getPrice()}">
+        </div>
+    </div>
 </body>
 </html>

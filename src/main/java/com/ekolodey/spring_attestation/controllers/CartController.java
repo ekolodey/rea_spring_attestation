@@ -1,10 +1,7 @@
 package com.ekolodey.spring_attestation.controllers;
 
 import com.ekolodey.spring_attestation.enumm.Status;
-import com.ekolodey.spring_attestation.models.Cart;
-import com.ekolodey.spring_attestation.models.Order;
-import com.ekolodey.spring_attestation.models.Person;
-import com.ekolodey.spring_attestation.models.Product;
+import com.ekolodey.spring_attestation.models.*;
 import com.ekolodey.spring_attestation.repositories.CartRepository;
 import com.ekolodey.spring_attestation.repositories.OrderRepository;
 import com.ekolodey.spring_attestation.security.PersonDetails;
@@ -16,9 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Controller
 public class CartController {
@@ -40,101 +37,87 @@ public class CartController {
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
         return personDetails.getPerson();
     }
-    
-    @GetMapping("/cart/add/{id}")
-    public String addProductInCart(@PathVariable("id") int id, Model model){
-        // Получаем продукт по id
-        Product product = productService.getProductId(id);
-        // Извлекаем объект аутентифицированного пользователя
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+
+    private int getPersonId(){
         // Извлекаем id пользователя из объекта
-        int id_person = personDetails.getPerson().getId();
-        Cart cart = new Cart(id_person, product.getId());
+        return getPerson().getId();
+    }
+
+
+    @GetMapping("/cart")
+    public String cart(Model model){
+        List<Cart> cartList = cartRepository.findByPersonId(getPersonId());
+        float total = 0;
+
+        for(Cart item: cartList){
+            total += item.getTotalPrice();
+        }
+        model.addAttribute("cart", cartList);
+        model.addAttribute("total", total);
+
+        return "/user/cart";
+    }
+
+
+    @GetMapping("/cart/add/{id}")
+    public String addProductInCart(@PathVariable("id") int productId){
+        int id_person = getPersonId();
+        Cart cart = cartRepository.findByPersonIdAndProductId(id_person, productId);
+        if (cart == null)
+        {
+            Product product = productService.getProductId(productId);
+            cart = new Cart(id_person,product,0);
+        }
+        cart.setCount(cart.getCount() + 1);
         cartRepository.save(cart);
         return "redirect:/cart";
     }
 
-    @GetMapping("/cart")
-    public String cart(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
-        // Извлекаем id пользователя из объекта
-        int id_person = personDetails.getPerson().getId();
-
-        List<Cart> cartList = cartRepository.findByPersonId(id_person);
-        List<Product> productList = new ArrayList<>();
-
-        // Получаем продукты из корзины по id товара
-        for (Cart cart: cartList) {
-            productList.add(productService.getProductId(cart.getProductId()));
-        }
-
-        // Вычисление итоговой цена
-        float price = 0;
-        for (Product product: productList) {
-            price += product.getPrice();
-        }
-
-        model.addAttribute("price", price);
-        model.addAttribute("cart_product", productList);
-        return "/user/cart";
-    }
-
     @GetMapping("/cart/delete/{id}")
-    public String deleteProductFromCart(Model model, @PathVariable("id") int id){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
-        // Извлекаем id пользователя из объекта
-        int id_person = personDetails.getPerson().getId();
-        List<Cart> cartList = cartRepository.findByPersonId(id_person);
-        List<Product> productList = new ArrayList<>();
+    public String deleteProductFromCart(@PathVariable("id") int productId){
+        Cart cart = cartRepository.findByPersonIdAndProductId(getPersonId(), productId);
 
-        // Получаем продукты из корзины по id товара
-        for (Cart cart: cartList) {
-            productList.add(productService.getProductId(cart.getProductId()));
+        if (cart != null){
+            cart.setCount(cart.getCount()-1);
+            if(cart.getCount() == 0){
+                cartRepository.delete(cart);
+            } else {
+                cartRepository.save(cart);
+            }
         }
-        cartRepository.deleteCartByProductId(id);
+
         return "redirect:/cart";
     }
 
 
     @GetMapping("/order/create")
     public String order(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
-        // Извлекаем id пользователя из объекта
-        int id_person = personDetails.getPerson().getId();
-
-        List<Cart> cartList = cartRepository.findByPersonId(id_person);
-        List<Product> productList = new ArrayList<>();
-
-        // Получаем продукты из корзины по id товара
-        for (Cart cart: cartList) {
-            productList.add(productService.getProductId(cart.getProductId()));
-        }
-
-        // Вычисление итоговой цена
-        float price = 0;
-        for (Product product: productList) {
-            price += product.getPrice();
-        }
+        Person person = getPerson();
+        List<Cart> cartList = cartRepository.findByPersonId(person.getId());
 
         String uuid = UUID.randomUUID().toString();
-        for(Product product : productList){
-            Order newOrder = new Order(uuid, product, personDetails.getPerson(), 1, product.getPrice(), Status.Оформлен);
-            orderRepository.save(newOrder);
-            cartRepository.deleteCartByProductId(product.getId());
+
+        Order order = new Order(uuid, person, Status.Ожидает);
+
+        HashSet<OrderItem> items = new HashSet<>();
+        for(Cart cart: cartList){
+            Product product = cart.getProduct();
+            OrderItem item = new OrderItem(product, order, cart.getCount(), product.getPrice());
+            items.add(item);
         }
+
+        order.setItems(items);
+        orderRepository.save(order);
+
+        cartRepository.deleteByPersonId(person.getId());
         return "redirect:/orders";
     }
 
     @GetMapping("/orders")
     public String orderUser(Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
-        List<Order> orderList = orderRepository.findByPerson(personDetails.getPerson());
-        model.addAttribute("orders", orderList);
+        List<Order> orders = orderRepository.findByPerson(getPerson());
+
+        model.addAttribute("orders", orders);
         return "/user/orders";
     }
 }

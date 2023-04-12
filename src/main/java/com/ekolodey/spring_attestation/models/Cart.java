@@ -13,12 +13,18 @@ public class Cart {
     @Column(name = "person_id")
     private int personId;
 
-    @Column(name = "product_id")
-    private int productId;
 
-    public Cart(int personId, int productId) {
+    @Column(name="count")
+    private int count;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    public Cart(int personId, Product product, int count) {
         this.personId = personId;
-        this.productId = productId;
+        this.product=product;
+        this.count = count;
     }
 
     public Cart() {
@@ -40,11 +46,23 @@ public class Cart {
         this.personId = personId;
     }
 
-    public int getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public float getTotalPrice(){
+        return this.getProduct().getPrice() * this.getCount();
     }
 }

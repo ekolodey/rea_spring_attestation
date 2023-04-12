@@ -2,8 +2,10 @@ package com.ekolodey.spring_attestation.models;
 
 import com.ekolodey.spring_attestation.enumm.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -15,28 +17,23 @@ public class Order {
     private String number;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    private Product product;
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Person person;
 
-    private int count;
-    private float price;
     private LocalDateTime dateTime;
 
     private Status status;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<OrderItem> items;
 
     @PrePersist
     private void init(){
         dateTime = LocalDateTime.now();
     }
 
-    public Order(String number, Product product, Person person, int count, float price, Status status) {
+    public Order(String number, Person person, Status status) {
         this.number = number;
-        this.product = product;
         this.person = person;
-        this.count = count;
-        this.price = price;
         this.status = status;
     }
 
@@ -59,36 +56,12 @@ public class Order {
         this.number = number;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public Person getPerson() {
         return person;
     }
 
     public void setPerson(Person person) {
         this.person = person;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
     }
 
     public LocalDateTime getDateTime() {
@@ -105,5 +78,21 @@ public class Order {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<OrderItem> items) {
+        this.items = items;
+    }
+
+    public float getTotalPrice(){
+        float result = 0;
+        for (OrderItem item: this.getItems()) {
+            result += item.getPrice() * item.getCount();
+        }
+        return result;
     }
 }
