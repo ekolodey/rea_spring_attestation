@@ -14,5 +14,9 @@
                th:text="'№'+${order.getNumber()} + ' от ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy HH:mm')}"></a>
         </li>
     </ul>
+
+    <ul>
+        <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
+    </ul>
 </body>
 </html>

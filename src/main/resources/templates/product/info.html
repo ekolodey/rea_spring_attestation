@@ -12,23 +12,34 @@
 </head>
 <body>
     <h3>Информация о товаре: </h3>
-    <p th:text="'Наименование: ' + ${product.getTitle()}"></p>
-    <p th:text="'Описание: ' + ${product.getDescription()}"></p>
-    <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-    <p th:text="'Cклад: ' + ${product.getWarehouse()}"></p>
-    <p th:text="'Продавец: ' + ${product.getSeller()}"></p>
-    <p th:text="'Категория: ' + ${product.getCategory().getName()}"></p>
+    <dl>
+        <dt>Наименование</dt>
+        <dd th:text="${product.getTitle()}"></dd>
+        <dt>Описание</dt>
+        <dd th:text="${product.getDescription()}"></dd>
+        <dt>Цена</dt>
+        <dd th:text="${product.getPrice()}"></dd>
+        <dt>Cклад</dt>
+        <dd th:text="${product.getWarehouse()}"></dd>
+        <dt>Продавец</dt>
+        <dd th:text="${product.getSeller()}"></dd>
+        <dt>Категория</dt>
+        <dd th:text="${product.getCategory().getName()}"></dd>
+    </dl>
+
     <div th:each="img : ${product.getImageList()}">
         <img th:src="'/img/' + ${img.getFileName()}" style="width: 200px">
     </div>
 
-    <p sec:authorize="hasRole('USER')">
-        <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить товар в корзину</a>
-    </p>
+    <ul>
+        <li sec:authorize="hasRole('USER')" ><a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/product/edit/{id}(id=${product.getId()})}">Изменить</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/product/delete/{id}(id=${product.getId()})}">Удалить</a></li>
+        <li><a th:href="@{/}">Вернутся назад</a></li>
+    </ul>
 
-    <ul sec:authorize="hasRole('ADMIN')">
-        <li><a th:href="@{/admin/product/edit/{id}(id=${product.getId()})}">Изменить</a></li>
-        <li><a th:href="@{/admin/product/delete/{id}(id=${product.getId()})}">Удалить</a></li>
+    <ul >
+
     </ul>
 </body>
 </html>

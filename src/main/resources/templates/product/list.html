@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Cписок товаров</title>
+    <title>Товары</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
@@ -10,12 +10,13 @@
     <h1>Список товаров</h1>
 
     <ul>
-        <li sec:authorize="isAnonymous()"><a href="user/login">Вход</a></li>
-        <li sec:authorize="isAnonymous()"><a href="user/register">Регистрация</a></li>
-        <li sec:authorize="hasRole('ADMIN')"><a href="admin/product/add">Добавить товар</a></li>
+        <li sec:authorize="isAnonymous()"><a th:href="@{user/login}">Вход</a></li>
+        <li sec:authorize="isAnonymous()"><a th:href="@{user/register}">Регистрация</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{admin/product/add}">Добавить товар</a></li>
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/}">Вернутся в личный кабинет</a></li>
     </ul>
     <h3>Cортировка, поиск, фильтрация</h3>
-    <form th:method="POST" th:action="@{/product/search}">
+    <form th:method="POST" th:action="@{/products}">
         <fieldset>
             <legend>Выберите параметры для сортировки, поиска, фильтрации:</legend>
             <label for="search">Наименование:</label>
@@ -44,37 +45,42 @@
             <fieldset>
                 <legend>Категория товаров</legend>
 
-                <input type="radio" id="furniture" name="contract" value="furniture">
-                <label for="furniture">Мебель</label>
-
-                <input type="radio" id="appliances" name="contract" value="appliances">
-                <label for="appliances">Бытовая техника</label>
-
-                <input type="radio" id="clothes" name="contract" value="clothes">
-                <label for="clothes">Одежда</label>
+                <p th:each="category: ${categories}">
+                    <input type="radio" th:id="'category'+${category.getId()}" name="contract"  th:value="${category.getId()}">
+                    <label th:for="'category'+${category.getId()}" th:text="${category.getName()}"></label>
+                </p>
             </fieldset>
 
             <button type="submit">Найти</button>
         </fieldset>
     </form>
 
-    <hr>
-    <h3>Результат поиска, cортировки, фильтрации</h3>
-    <div th:each="product : ${search_product}">
-        <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-        <br>
-        <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
-        <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-        <hr>
+    <div th:if="${search_product}">
+        <h3>Результат поиска, cортировки, фильтрации</h3>
+        <div th:each="product : ${search_product}">
+            <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+            <br>
+            <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+            <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+            <hr>
+            <p sec:authorize="hasRole('USER')">
+                <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+            </p>
+        </div>
     </div>
-    <hr>
-    <h3>Доступные товары: </h3>
-    <div th:each="product : ${products}">
-        <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-        <br>
-        <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
-        <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-        <hr>
+
+    <div th:unless="${search_product}">
+        <h3>Доступные товары: </h3>
+        <div th:each="product : ${products}">
+            <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+            <br>
+            <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+            <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+            <hr>
+            <p sec:authorize="hasRole('USER')">
+                <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+            </p>
+        </div>
     </div>
 </body>
 </html>

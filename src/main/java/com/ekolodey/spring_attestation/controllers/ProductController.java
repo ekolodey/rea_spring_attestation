@@ -1,5 +1,6 @@
 package com.ekolodey.spring_attestation.controllers;
 
+import com.ekolodey.spring_attestation.repositories.CategoryRepository;
 import com.ekolodey.spring_attestation.repositories.ProductRepository;
 import com.ekolodey.spring_attestation.services.ProductService;
 import org.springframework.stereotype.Controller;
@@ -11,15 +12,18 @@ public class ProductController {
 
     private final ProductRepository productRepository;
     private  final ProductService productService;
+    private final CategoryRepository categoryRepository;
 
-    public ProductController(ProductRepository productRepository, ProductService productService) {
+    public ProductController(ProductRepository productRepository, ProductService productService, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.productService = productService;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/products")
     public String list(Model model){
         model.addAttribute("products", productService.getAllProduct());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "product/list";
     }
 
@@ -29,9 +33,11 @@ public class ProductController {
         return "/product/info";
     }
 
-    @PostMapping("/product/search")
+    @PostMapping("/products")
     public String productSearch(@RequestParam("search") String search, @RequestParam("ot") String ot, @RequestParam("do") String Do, @RequestParam(value = "price", required = false, defaultValue = "") String price, @RequestParam(value = "contract", required = false, defaultValue = "")String contract, Model model){
         model.addAttribute("products", productService.getAllProduct());
+        model.addAttribute("categories", categoryRepository.findAll());
+
 
         if(!ot.isEmpty() & !Do.isEmpty()){
             if(!price.isEmpty()){
@@ -71,7 +77,7 @@ public class ProductController {
         model.addAttribute("value_search", search);
         model.addAttribute("value_price_ot", ot);
         model.addAttribute("value_price_do", Do);
-        return "/product/search";
+        return "/product/list";
 
     }
 }

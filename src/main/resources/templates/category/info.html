@@ -1,23 +1,45 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Заказ №' + ${order.getNumber()}"></title>
+    <title th:text="'Категория' + ${category.toString()}"></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
+    <h2 th:text="'Категория ' + ${category.getName()}"></h2>
 
-    <p th:text="'Cтатус: ' + ${order.getStatus()}">
-    <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
-    <p th:text="'Сумма заказа: ' + ${order.getTotalPrice()}"></p>
+    <div sec:authorize="hasRole('ADMIN')">
+        <form th:method="POST" th:object="${category}" th:action="@{/category/edit}" >
+            <input type="hidden" th:field="*{id}">
+            <label for="name">Название категории: </label>
+            <input type="text" th:field="*{name}" placeholder="Название" id="name">
 
-    <div th:each="item: ${order.getItems()}" th:with="product=${item.getProduct()}">
-        <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px">
-        <p th:text="'Наименование: ' + ${product.getTitle()}">
-        <p th:text="'Количество: ' + ${item.getCount()}">
-        <p th:text="'Цена: ' + ${item.getPrice()}">
+            <button type="submit">Отредактировать</button>
+        </form>
+
+        <p th:if="${category.getProducts().isEmpty()}">
+            <a th:href="@{/category/delete/{id}(id=${category.getId()})}">Удалить</a>
+        </p>
+        <p th:unless="${category.getProducts().isEmpty()}">
+            <em>Для удаления категории, необходимо удалить все товары из неё</em>
+        </p>
+
+    </div>
+
+    <div th:if="${category.getProducts().size() > 0}">
+        <h3>Товары в категории:</h3>
+        <div th:each="product : ${category.getProducts()}">
+            <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+            <br>
+            <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+            <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+            <hr>
+            <p sec:authorize="hasRole('USER')">
+                <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+            </p>
+        </div>
+
     </div>
 </body>
 </html>

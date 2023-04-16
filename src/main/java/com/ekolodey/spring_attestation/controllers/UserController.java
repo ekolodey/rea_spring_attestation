@@ -42,7 +42,7 @@ public class UserController {
             return "user/register";
         }
         personService.register(person);
-        return "redirect:/person account";
+        return "redirect:/";
     }
 
 }

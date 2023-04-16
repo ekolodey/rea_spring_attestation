@@ -19,6 +19,10 @@
     </div>
     <h3 th:text="'Итоговая цена: ' + ${total}"></h3>
 
-    <a th:if="${cart.size() > 0}" href="/order/create">Оформить заказ</a>
+    <ul>
+        <li th:if="${cart.size() > 0}"><a href="/order/create">Оформить заказ</a></li>
+        <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
+    </ul>
+
 </body>
 </html>

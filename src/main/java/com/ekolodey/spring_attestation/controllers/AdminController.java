@@ -68,35 +68,27 @@ public class AdminController {
             uploadImage(product, file_five);
         }
         productService.saveProduct(product, category_db);
-        return "redirect:/admin";
+        return "redirect:/";
     }
 
-    private void uploadImage(Product product, MultipartFile file_one) throws IOException {
+    private void uploadImage(Product product, MultipartFile file) throws IOException {
         File uploadDir = new File(uploadPath);
         if(!uploadDir.exists()){
             uploadDir.mkdir();
         }
         String uuidFile = UUID.randomUUID().toString();
-        String resultFileName = uuidFile + "." + file_one.getOriginalFilename();
-        file_one.transferTo(new File(uploadDir + "/" + resultFileName).getAbsoluteFile());
+        String resultFileName = uuidFile + "." + file.getOriginalFilename();
+        file.transferTo(new File(uploadDir + "/" + resultFileName).getAbsoluteFile());
         Image image = new Image();
         image.setProduct(product);
         image.setFileName(resultFileName);
         product.addImageToProduct(image);
     }
 
-
-    @GetMapping("/admin")
-    public String admin(Model model)
-    {
-        model.addAttribute("products", productService.getAllProduct());
-        return "admin";
-    }
-
     @GetMapping("admin/product/delete/{id}")
     public String deleteProduct(@PathVariable("id") int id){
         productService.deleteProduct(id);
-        return "redirect:/admin";
+        return "redirect:/";
     }
 
     @GetMapping("admin/product/edit/{id}")
@@ -115,7 +107,7 @@ public class AdminController {
             return "product/edit";
         }
         productService.updateProduct(id, product);
-        return "redirect:/admin";
+        return "redirect:/";
     }
 
 }
