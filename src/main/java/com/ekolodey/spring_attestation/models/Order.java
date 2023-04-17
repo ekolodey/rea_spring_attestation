@@ -1,8 +1,6 @@
 package com.ekolodey.spring_attestation.models;
 
-import com.ekolodey.spring_attestation.enumm.Status;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -21,7 +19,8 @@ public class Order {
 
     private LocalDateTime dateTime;
 
-    private Status status;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private OrderStatus status;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<OrderItem> items;
@@ -31,7 +30,7 @@ public class Order {
         dateTime = LocalDateTime.now();
     }
 
-    public Order(String number, Person person, Status status) {
+    public Order(String number, Person person, OrderStatus status) {
         this.number = number;
         this.person = person;
         this.status = status;
@@ -72,11 +71,11 @@ public class Order {
         this.dateTime = dateTime;
     }
 
-    public Status getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

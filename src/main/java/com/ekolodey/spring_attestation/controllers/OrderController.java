@@ -1,9 +1,9 @@
 package com.ekolodey.spring_attestation.controllers;
 
-import com.ekolodey.spring_attestation.enumm.Status;
 import com.ekolodey.spring_attestation.models.*;
 import com.ekolodey.spring_attestation.repositories.CartRepository;
 import com.ekolodey.spring_attestation.repositories.OrderRepository;
+import com.ekolodey.spring_attestation.repositories.OrderStatusRepository;
 import com.ekolodey.spring_attestation.security.PersonDetails;
 import com.ekolodey.spring_attestation.services.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,11 +23,13 @@ public class OrderController {
     private final CartRepository cartRepository;
 
     private final OrderRepository orderRepository;
+    private final OrderStatusRepository orderStatusRepository;
     private final ProductService productService;
 
-    public OrderController(CartRepository cartRepository, OrderRepository orderRepository, ProductService productService) {
+    public OrderController(CartRepository cartRepository, OrderRepository orderRepository, OrderStatusRepository orderStatusRepository, ProductService productService) {
         this.cartRepository = cartRepository;
         this.orderRepository = orderRepository;
+        this.orderStatusRepository = orderStatusRepository;
         this.productService = productService;
     }
 
@@ -92,13 +93,13 @@ public class OrderController {
 
 
     @GetMapping("/order/create")
-    public String order(){
+    public String create(){
         Person person = getPerson();
         List<Cart> cartList = cartRepository.findByPersonId(person.getId());
 
         String uuid = UUID.randomUUID().toString();
 
-        Order order = new Order(uuid, person, Status.Ожидает);
+        Order order = new Order(uuid, person, orderStatusRepository.findByName("Ожидает"));
 
         HashSet<OrderItem> items = new HashSet<>();
         for(Cart cart: cartList){
@@ -115,7 +116,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public String orderUser(Model model, HttpServletRequest request){
+    public String list(Model model, HttpServletRequest request){
         List<Order> orders;
 
         if(request.isUserInRole("ADMIN"))
@@ -128,10 +129,22 @@ public class OrderController {
     }
 
     @GetMapping("/order/{id}")
-    public String orderUser(@PathVariable("id") String orderId, Model model){
+    public String info(@PathVariable("id") String orderId, Model model){
         Order order = orderRepository.findByNumber(orderId);
 
         model.addAttribute("order", order);
+        model.addAttribute("statuses", orderStatusRepository.findAll());
+        return "order/info";
+    }
+
+    @PostMapping("/order/{id}")
+    public String changeStatus(@PathVariable("id") String orderId, @ModelAttribute("status") Integer statusId, Model model){
+        Order order = orderRepository.findByNumber(orderId);
+        order.setStatus(orderStatusRepository.findById(statusId).get());
+        orderRepository.save(order);
+
+        model.addAttribute("order", order);
+        model.addAttribute("statuses", orderStatusRepository.findAll());
         return "order/info";
     }
 }

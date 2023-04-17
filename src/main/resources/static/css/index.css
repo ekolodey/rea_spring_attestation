@@ -1,5 +1,6 @@
 select,input,textarea{
     width: 100%;
+    box-sizing: border-box;
 }
 dt {
     font-weight: bold;

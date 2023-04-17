@@ -16,48 +16,58 @@
         <li sec:authorize="isAuthenticated()"><a th:href="@{/}">Вернутся в личный кабинет</a></li>
     </ul>
     <h3>Cортировка, поиск, фильтрация</h3>
-    <form th:method="POST" th:action="@{/products}">
+    <form th:method="POST" th:action="@{/products}" th:object="${search}">
         <fieldset>
             <legend>Выберите параметры для сортировки, поиска, фильтрации:</legend>
-            <label for="search">Наименование:</label>
-            <input type="text" id="search" name="search" th:value="*{value_search}">
+            <label for="search">Название/описание:</label>
+            <input type="text" id="search" name="search" th:field="*{name}">
 
             <fieldset>
                 <legend>Цена, P</legend>
 
                 <label for="ot">От</label>
-                <input type="text" name="ot" id="ot" th:value="*{value_price_ot}">
+                <input type="text" name="ot" id="ot" th:field="*{priceFrom}">
 
                 <label for="do">До</label>
-                <input type="text" name="do" id="do" th:value="*{value_price_do}">
+                <input type="text" name="do" id="do" th:field="*{priceTo}">
             </fieldset>
 
             <fieldset>
                 <legend>Сортировка</legend>
 
-                <input type="radio" id="ascending_price" name="price" value="sorted_by_ascending_price">
-                <label for="ascending_price">По возрастанию цены</label>
+                <div>
+                    <label>
+                        <input type="radio" th:field="*{sortOrder}" value="asc">
+                        По возрастанию цены
+                    </label>
+                </div>
 
-                <input type="radio" id="descending_price" name="price" value="sorted_by_descending_price">
-                <label for="descending_price">По убыванию цены</label>
+                <div>
+                    <label>
+                        <input type="radio" th:field="*{sortOrder}" value="desc">
+                        По убыванию цены
+                    </label>
+                </div>
             </fieldset>
 
             <fieldset>
                 <legend>Категория товаров</legend>
 
-                <p th:each="category: ${categories}">
-                    <input type="radio" th:id="'category'+${category.getId()}" name="contract"  th:value="${category.getId()}">
-                    <label th:for="'category'+${category.getId()}" th:text="${category.getName()}"></label>
-                </p>
+                <div th:each="category: ${categories}">
+                    <label>
+                        <input type="checkbox" th:field="*{categories}" th:id="'category'+${category.getId()}" name="contract" th:value="${category.getId()}">
+                        <span th:text="${category.getName()}"></span>
+                    </label>
+                </div>
             </fieldset>
 
             <button type="submit">Найти</button>
         </fieldset>
     </form>
 
-    <div th:if="${search_product}">
+    <div th:if="${search_result}">
         <h3>Результат поиска, cортировки, фильтрации</h3>
-        <div th:each="product : ${search_product}">
+        <div th:each="product : ${search_result}">
             <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
             <br>
             <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
@@ -69,9 +79,9 @@
         </div>
     </div>
 
-    <div th:unless="${search_product}">
+    <div th:if="${all_products}">
         <h3>Доступные товары: </h3>
-        <div th:each="product : ${products}">
+        <div th:each="product : ${all_products}">
             <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
             <br>
             <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>

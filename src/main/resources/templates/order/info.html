@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title th:text="'Заказ №' + ${order.getNumber()}"></title>
@@ -9,7 +9,22 @@
 <body>
     <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
 
-    <p th:text="'Cтатус: ' + ${order.getStatus()}">
+    <form sec:authorize="hasRole('ADMIN')" th:action="@{/order/{id}(id=${order.getNumber()})}" th:method="POST">
+        <label for="status"> Статус:</label>
+        <select id="status" name="status">
+            <option
+              th:each="s: ${statuses}"
+              th:value="${s.getId()}"
+              th:text="${s.getName()}"
+              th:selected="${order.status == s}"
+            >
+            </option>
+        </select>
+
+        <button type="submit">Изменить</button>
+    </form>
+
+    <p sec:authorize="isAnonymous()||hasRole('ROLE_USER')" th:text="'Cтатус: ' + ${order.getStatus()}">
     <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
     <p th:text="'Сумма заказа: ' + ${order.getTotalPrice()}"></p>
 
