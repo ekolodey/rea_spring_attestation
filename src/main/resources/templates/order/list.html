@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Заказы</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" >
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
     <h3>Заказы</h3>
+
+    <form sec:authorize="hasRole('ADMIN')" th:action="@{/orders}" th:method="POST">
+        <label for="search">Последние 4-е буквы/цифры заказа:</label>
+        <input type="text" name="search" id="search" th:value="${search}" maxlength="4">
+
+        <button type="submit">Поиск</button>
+    </form>
+
     <ul>
         <li th:each="order : ${orders}">
             <a th:href="@{/order/{id}(id=${order.getNumber()})}"

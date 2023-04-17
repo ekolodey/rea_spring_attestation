@@ -116,7 +116,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public String list(Model model, HttpServletRequest request){
+    public String list(HttpServletRequest request, Model model){
         List<Order> orders;
 
         if(request.isUserInRole("ADMIN"))
@@ -127,6 +127,17 @@ public class OrderController {
         model.addAttribute("orders", orders);
         return "order/list";
     }
+
+    @PostMapping("/orders")
+    public String listSearch(@ModelAttribute("search") String search, HttpServletRequest request, Model model){
+        if(!request.isUserInRole("ADMIN"))
+            return "redirect:/";
+
+        List<Order> orders = orderRepository.findByLastChars(search);
+        model.addAttribute("orders", orders);
+        return "order/list";
+    }
+
 
     @GetMapping("/order/{id}")
     public String info(@PathVariable("id") String orderId, Model model){
