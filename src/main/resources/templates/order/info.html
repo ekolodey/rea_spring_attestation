@@ -24,7 +24,7 @@
         <button type="submit">Изменить</button>
     </form>
 
-    <p sec:authorize="isAnonymous()||hasRole('ROLE_USER')" th:text="'Cтатус: ' + ${order.getStatus()}">
+    <p sec:authorize="isAnonymous()||hasRole('USER')" th:text="'Cтатус: ' + ${order.getStatus()}">
     <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
     <p th:text="'Сумма заказа: ' + ${order.getTotalPrice()}"></p>
 

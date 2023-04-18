@@ -4,7 +4,7 @@ VALUES
     (2, 'user1', '$2a$10$J9w1mKOWL7au4QynJFqTYuA6iu8v4V45TzDR2UdHX8h2zI5OXXZHa', 'ROLE_USER'),
     (3, 'user2', '$2a$10$RbPMdI7WiKSPwxru.MpELOJmEnsmaoAFEn4Bzb22Ghzd5OVUisXUe', 'ROLE_USER')
 on conflict do nothing;
-;
+
 INSERT INTO category(id, name)
 VALUES
     (1,'Мебель'),

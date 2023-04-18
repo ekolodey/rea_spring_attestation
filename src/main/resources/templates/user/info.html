@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Пользователь ' + ${user.getLogin()}"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
+</head>
+<body>
+    <h1 th:text="'Пользователь ' + ${user.getLogin()}"></h1>
+
+    <form th:action="@{/user/{id}(id=${user.getId()})}" th:method="POST">
+        <label for="role">Роль:</label>
+        <select id="role" name="role">
+            <option value="ROLE_USER" th:selected='${user.getRole()=="ROLE_USER"}'>Пользователь</option>
+            <option value="ROLE_ADMIN" th:selected='${user.getRole().equals("ROLE_ADMIN")}'>Администратор</option>
+        </select>
+
+        <button type="submit">Изменить</button>
+    </form>
+
+    <ul>
+        <li><a th:href="@{/users}">Вернутся к списку пользователей</a></li>
+        <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
+    </ul>
+</body>
+</html>

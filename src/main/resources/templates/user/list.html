@@ -2,21 +2,22 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Категории</title>
+    <title>Пользователи</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h3>Категории</h3>
+    <h1>Список пользователей</h1>
 
     <ul>
-        <li th:each="item : ${list}">
-            <a th:href="@{category/info/{id}(id=${item.getId()})}" th:text="${item.getName()}"></a>
+        <li th:each="user : ${users}">
+            <a th:href="@{user/{id}(id=${user.getId()})}" th:text="${user.getLogin()}"></a>
+            <span th:if="${user.getRole() =='ROLE_USER'}"> - пользователь</span>
+            <span th:if="${user.getRole() =='ROLE_ADMIN'}"> - администратор</span>
         </li>
     </ul>
 
-    <ul sec:authorize="isAuthenticated()">
-        <li sec:authorize="hasRole('ADMIN')" ><a th:href="@{category/add}">Создать категорию</a></li>
+    <ul>
         <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
     </ul>
 </body>

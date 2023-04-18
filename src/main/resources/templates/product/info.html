@@ -35,6 +35,7 @@
         <li sec:authorize="hasRole('USER')" ><a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a></li>
         <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/product/edit/{id}(id=${product.getId()})}">Изменить</a></li>
         <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/product/delete/{id}(id=${product.getId()})}">Удалить</a></li>
+        <li><a th:href="@{/products}">Вернутся к списку товаров</a></li>
         <li><a th:href="@{/}">Вернутся назад</a></li>
     </ul>
 

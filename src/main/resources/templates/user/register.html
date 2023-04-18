@@ -8,7 +8,7 @@
 </head>
 <body>
 <h3>Регистрация</h3>
-<form method="post" th:actioin="@{/user/register}" th:object="${person}">
+<form method="post" th:actioin="@{/register}" th:object="${person}">
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     <label for="login">Введите логин: </label>
     <input type="text" th:field="*{login}" id="login">
@@ -20,6 +20,6 @@
     <br>
     <button type="submit">Зарегистрироваться</button>
 </form>
-<a href="/user/login">Вход</a>
+<a href="/login">Вход</a>
 </body>
 </html>
