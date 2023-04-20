@@ -24,7 +24,8 @@
         <button type="submit">Изменить</button>
     </form>
 
-    <p sec:authorize="isAnonymous()||hasRole('USER')" th:text="'Cтатус: ' + ${order.getStatus()}">
+    <p sec:authorize="isAnonymous()||hasRole('USER')" th:text="'Cтатус: ' + ${order.getStatus().getName()}">
+    <p sec:authorize="hasRole('ADMIN')" th:text="'Пользователь: ' + ${order.getPerson().getLogin()}">
     <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
     <p th:text="'Сумма заказа: ' + ${order.getTotalPrice()}"></p>
 
@@ -34,5 +35,10 @@
         <p th:text="'Количество: ' + ${item.getCount()}">
         <p th:text="'Цена: ' + ${item.getPrice()}">
     </div>
+
+    <ul>
+        <li><a th:href="@{/orders}">Вернутся к списку заказов</a></li>
+        <li><a th:href="@{/}">Вернутся назад</a></li>
+    </ul>
 </body>
 </html>
