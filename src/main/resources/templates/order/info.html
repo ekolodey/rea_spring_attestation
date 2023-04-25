@@ -29,11 +29,13 @@
     <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
     <p th:text="'Сумма заказа: ' + ${order.getTotalPrice()}"></p>
 
-    <div th:each="item: ${order.getItems()}" th:with="product=${item.getProduct()}">
-        <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px">
-        <p th:text="'Наименование: ' + ${product.getTitle()}">
-        <p th:text="'Количество: ' + ${item.getCount()}">
-        <p th:text="'Цена: ' + ${item.getPrice()}">
+    <div class="goods-list">
+        <div th:each="item: ${order.getItems()}" th:with="product=${item.getProduct()}">
+            <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px"><br>
+            <span th:text="'Наименование: ' + ${product.getTitle()}"></span><br>
+            <span th:text="'Количество: ' + ${item.getCount()}"></span><br>
+            <span th:text="'Цена: ' + ${item.getPrice()}"></span>
+        </div>
     </div>
 
     <ul>

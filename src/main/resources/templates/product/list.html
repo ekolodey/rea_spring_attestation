@@ -67,29 +67,33 @@
 
     <div th:if="${search_result}">
         <h3>Результат поиска, cортировки, фильтрации</h3>
-        <div th:each="product : ${search_result}">
-            <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-            <br>
-            <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
-            <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-            <hr>
-            <p sec:authorize="hasRole('USER')">
-                <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
-            </p>
+        <div class="goods-list">
+            <div th:each="product : ${search_result}">
+                <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+                <br>
+                <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+                <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+
+                <p sec:authorize="hasRole('USER')">
+                    <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+                </p>
+            </div>
         </div>
     </div>
 
     <div th:if="${all_products}">
         <h3>Доступные товары: </h3>
-        <div th:each="product : ${all_products}">
-            <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-            <br>
-            <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
-            <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-            <hr>
-            <p sec:authorize="hasRole('USER')">
-                <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
-            </p>
+        <div class="goods-list">
+            <div th:each="product : ${all_products}">
+                <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+                <br>
+                <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+                <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+
+                <p class="add-to-cart" sec:authorize="hasRole('USER')">
+                    <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+                </p>
+            </div>
         </div>
     </div>
 </body>

@@ -8,15 +8,21 @@
 </head>
 <body>
     <h3>Корзина товаров</h3>
-    <div th:each="position : ${cart}" th:with="product=${position.getProduct()}">
-        <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-        <br>
-        <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
-        <p th:text="'Цена: ' + ${position.getTotalPrice()}"></p>
-        <p th:text="'Количество: ' + ${position.getCount()}"></p>
-        <a th:href="@{/cart/delete/{id}(id=${product.getId()})}">Удалить</a>&nbsp;<a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить ещё</a>
-        <hr>
+    <div class="goods-list">
+        <div th:each="position : ${cart}" th:with="product=${position.getProduct()}">
+            <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+            <br>
+            <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a><br>
+            <span th:text="'Цена: ' + ${position.getTotalPrice()}"></span><br>
+            <span th:text="'Количество: ' + ${position.getCount()}"></span>
+
+            <p class="add-to-cart">
+                <a th:href="@{/cart/delete/{id}(id=${product.getId()})}">Удалить</a><br>
+                <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить ещё</a>
+            </p>
+        </div>
     </div>
+
     <h3 th:text="'Итоговая цена: ' + ${total}"></h3>
 
     <ul>

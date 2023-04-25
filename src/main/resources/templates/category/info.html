@@ -29,15 +29,17 @@
 
     <div th:if="${category.getProducts().size() > 0}">
         <h3>Товары в категории:</h3>
-        <div th:each="product : ${category.getProducts()}">
-            <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-            <br>
-            <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
-            <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-            <hr>
-            <p sec:authorize="hasRole('USER')">
-                <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
-            </p>
+        <div class="goods-list">
+            <div th:each="product : ${category.getProducts()}">
+                <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+                <br>
+                <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+                <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+
+                <p class="add-to-cart" sec:authorize="hasRole('USER')">
+                    <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+                </p>
+            </div>
         </div>
 
     </div>

@@ -5,3 +5,16 @@ select,input,textarea{
 dt {
     font-weight: bold;
 }
+
+.goods-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20pt;
+    align-items: end;
+    text-align: center;
+}
+
+.add-to-cart {
+    border-top: 1px solid lightgray;
+    padding: 3pt;
+}

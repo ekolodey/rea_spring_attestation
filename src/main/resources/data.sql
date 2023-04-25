@@ -5,12 +5,6 @@ VALUES
     (3, 'user2', '$2a$10$RbPMdI7WiKSPwxru.MpELOJmEnsmaoAFEn4Bzb22Ghzd5OVUisXUe', 'ROLE_USER')
 on conflict do nothing;
 
-INSERT INTO category(id, name)
-VALUES
-    (1,'Мебель'),
-    (2,'Одежда'),
-    (3,'Бытовая техника')
-on conflict do nothing;
 
 INSERT INTO order_status(id, name)
 VALUES
