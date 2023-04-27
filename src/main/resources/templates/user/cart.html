@@ -22,7 +22,7 @@
         <h3>Корзина товаров</h3>
         <div class="goods-list">
             <div th:each="position : ${cart}" th:with="product=${position.getProduct()}">
-                <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+                <img th:src="'/img/' + ${product.imageList[0].getFileName()}" style="max-height: 250px;">
                 <br>
                 <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a><br>
                 <span th:text="'Цена: ' + ${position.getTotalPrice()}"></span><br>
@@ -36,11 +36,12 @@
         </div>
 
         <h3 th:text="'Итоговая цена: ' + ${total}"></h3>
+
+        <ul>
+            <li th:if="${cart.size() > 0}"><a href="/order/create">Оформить заказ</a></li>
+        </ul>
     </main>
 
-    <ul>
-        <li th:if="${cart.size() > 0}"><a href="/order/create">Оформить заказ</a></li>
-    </ul>
 
     <footer>
         <div class="flex-between">

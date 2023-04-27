@@ -44,7 +44,7 @@
 
         <div class="goods-list">
             <div th:each="item: ${order.getItems()}" th:with="product=${item.getProduct()}">
-                <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px"><br>
+                <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" style="max-height: 250px;"><br>
                 <strong th:text="${product.getTitle()}"></strong><br>
                 <span th:text="'Количество: ' + ${item.getCount()}"></span><br>
                 <span th:text="'Цена: ' + ${item.getPrice()}"></span>

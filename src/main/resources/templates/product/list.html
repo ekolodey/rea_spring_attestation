@@ -79,7 +79,7 @@
             <h3>Результат поиска, cортировки, фильтрации</h3>
             <div class="goods-list">
                 <div th:each="product : ${search_result}">
-                    <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+                    <img th:src="'/img/' + ${product.imageList[0].getFileName()}" style="max-height: 250px;">
                     <br>
                     <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
                     <p th:text="'Цена: ' + ${product.getPrice()}"></p>
@@ -95,7 +95,7 @@
             <h3>Доступные товары: </h3>
             <div class="goods-list">
                 <div th:each="product : ${all_products}">
-                    <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+                    <img th:src="'/img/' + ${product.imageList[0].getFileName()}" style="max-height: 250px;">
                     <br>
                     <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
                     <p th:text="'Цена: ' + ${product.getPrice()}"></p>
