@@ -7,17 +7,33 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h3>Категории</h3>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li sec:authorize="hasRole('ADMIN')" ><a th:href="@{category/add}">Создать категорию</a></li>
+                    <li><a th:href="@{/}">Вернутся назад</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <ul>
-        <li th:each="item : ${list}">
-            <a th:href="@{category/info/{id}(id=${item.getId()})}" th:text="${item.getName()}"></a>
-        </li>
-    </ul>
+    <main>
+        <h3>Категории</h3>
 
-    <ul sec:authorize="isAuthenticated()">
-        <li sec:authorize="hasRole('ADMIN')" ><a th:href="@{category/add}">Создать категорию</a></li>
-        <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
-    </ul>
+        <ul>
+            <li th:each="item : ${list}">
+                <a th:href="@{category/info/{id}(id=${item.getId()})}" th:text="${item.getName()}"></a>
+            </li>
+        </ul>
+    </main>
+
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>

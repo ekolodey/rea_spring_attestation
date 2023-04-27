@@ -40,6 +40,7 @@ public class SecurityConfig{
                         "/css/**",
                         "/js/**",
                         "/img/**",
+                        "/images/**",
                         "/products",
                         "/product/info/{id}")
                 .permitAll()

@@ -18,3 +18,41 @@ dt {
     border-top: 1px solid lightgray;
     padding: 3pt;
 }
+
+body {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+main,.flex-between {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px
+}
+
+header,footer {
+    background-color: #F3EADB;
+}
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav li {
+    list-style: none;
+}
+.tagline {
+    display: flex;
+    max-width: 300px;
+    gap: 10px;
+    text-align: center;
+    align-items: center;
+}
+footer {
+    max-height: 250px;
+}
+
+main {
+    min-height: calc(100vh - 250px);
+}

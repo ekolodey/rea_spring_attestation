@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Заказы</title>
@@ -7,6 +8,17 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
     <h3>Заказы</h3>
 
     <form sec:authorize="hasRole('ADMIN')" th:action="@{/orders}" th:method="POST">
@@ -22,9 +34,13 @@
                th:text="'№'+${order.getNumber()} + ' от ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy HH:mm')}"></a>
         </li>
     </ul>
+    </main>
 
-    <ul>
-        <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
-    </ul>
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>

@@ -7,18 +7,34 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h1>Список пользователей</h1>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <ul>
-        <li th:each="user : ${users}">
-            <a th:href="@{user/{id}(id=${user.getId()})}" th:text="${user.getLogin()}"></a>
-            <span th:if="${user.getRole() =='ROLE_USER'}"> - пользователь</span>
-            <span th:if="${user.getRole() =='ROLE_ADMIN'}"> - администратор</span>
-        </li>
-    </ul>
+    <main>
+        <h1>Список пользователей</h1>
 
-    <ul>
-        <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
-    </ul>
+        <ul>
+            <li th:each="user : ${users}">
+                <a th:href="@{user/{id}(id=${user.getId()})}" th:text="${user.getLogin()}"></a>
+                <span th:if="${user.getRole() =='ROLE_USER'}"> - пользователь</span>
+                <span th:if="${user.getRole() =='ROLE_ADMIN'}"> - администратор</span>
+            </li>
+        </ul>
+    </main>
+
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>

@@ -7,21 +7,37 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h1 th:text="'Пользователь ' + ${user.getLogin()}"></h1>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/users}">Вернутся к списку пользователей</a></li>
+                    <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <form th:action="@{/user/{id}(id=${user.getId()})}" th:method="POST">
-        <label for="role">Роль:</label>
-        <select id="role" name="role">
-            <option value="ROLE_USER" th:selected='${user.getRole()=="ROLE_USER"}'>Пользователь</option>
-            <option value="ROLE_ADMIN" th:selected='${user.getRole().equals("ROLE_ADMIN")}'>Администратор</option>
-        </select>
+    <main>
+        <h1 th:text="'Пользователь ' + ${user.getLogin()}"></h1>
 
-        <button type="submit">Изменить</button>
-    </form>
+        <form th:action="@{/user/{id}(id=${user.getId()})}" th:method="POST">
+            <label for="role">Роль:</label>
+            <select id="role" name="role">
+                <option value="ROLE_USER" th:selected='${user.getRole()=="ROLE_USER"}'>Пользователь</option>
+                <option value="ROLE_ADMIN" th:selected='${user.getRole().equals("ROLE_ADMIN")}'>Администратор</option>
+            </select>
 
-    <ul>
-        <li><a th:href="@{/users}">Вернутся к списку пользователей</a></li>
-        <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
-    </ul>
+            <button type="submit">Изменить</button>
+        </form>
+    </main>
+
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>

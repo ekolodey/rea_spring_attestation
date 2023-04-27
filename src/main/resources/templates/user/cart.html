@@ -7,28 +7,46 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h3>Корзина товаров</h3>
-    <div class="goods-list">
-        <div th:each="position : ${cart}" th:with="product=${position.getProduct()}">
-            <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-            <br>
-            <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a><br>
-            <span th:text="'Цена: ' + ${position.getTotalPrice()}"></span><br>
-            <span th:text="'Количество: ' + ${position.getCount()}"></span>
-
-            <p class="add-to-cart">
-                <a th:href="@{/cart/delete/{id}(id=${product.getId()})}">Удалить</a><br>
-                <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить ещё</a>
-            </p>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <h3 th:text="'Итоговая цена: ' + ${total}"></h3>
+    <main>
+        <h3>Корзина товаров</h3>
+        <div class="goods-list">
+            <div th:each="position : ${cart}" th:with="product=${position.getProduct()}">
+                <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+                <br>
+                <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a><br>
+                <span th:text="'Цена: ' + ${position.getTotalPrice()}"></span><br>
+                <span th:text="'Количество: ' + ${position.getCount()}"></span>
+
+                <p class="add-to-cart">
+                    <a th:href="@{/cart/delete/{id}(id=${product.getId()})}">Удалить</a><br>
+                    <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить ещё</a>
+                </p>
+            </div>
+        </div>
+
+        <h3 th:text="'Итоговая цена: ' + ${total}"></h3>
+    </main>
 
     <ul>
         <li th:if="${cart.size() > 0}"><a href="/order/create">Оформить заказ</a></li>
-        <li><a th:href="@{/}">Вернутся в личный кабинет</a></li>
     </ul>
 
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>

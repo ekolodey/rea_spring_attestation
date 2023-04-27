@@ -7,41 +7,62 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h2 th:text="'Категория ' + ${category.getName()}"></h2>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}">Вернутся на главную</a></li>
+                    <li><a th:href="@{/categories}">Вернутся в список категорий</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <div sec:authorize="hasRole('ADMIN')">
-        <form th:method="POST" th:object="${category}" th:action="@{/category/edit}" >
-            <input type="hidden" th:field="*{id}">
-            <label for="name">Название категории: </label>
-            <input type="text" th:field="*{name}" placeholder="Название" id="name">
+    <main>
+        <h2 th:text="'Категория ' + ${category.getName()}"></h2>
 
-            <button type="submit">Отредактировать</button>
-        </form>
+        <div sec:authorize="hasRole('ADMIN')">
+            <form th:method="POST" th:object="${category}" th:action="@{/category/edit}" >
+                <input type="hidden" th:field="*{id}">
+                <label for="name">Название категории: </label>
+                <input type="text" th:field="*{name}" placeholder="Название" id="name">
 
-        <p th:if="${category.getProducts().isEmpty()}">
-            <a th:href="@{/category/delete/{id}(id=${category.getId()})}">Удалить</a>
-        </p>
-        <p th:unless="${category.getProducts().isEmpty()}">
-            <em>Для удаления категории, необходимо удалить все товары из неё</em>
-        </p>
+                <button type="submit">Отредактировать</button>
+            </form>
 
-    </div>
+            <p th:if="${category.getProducts().isEmpty()}">
+                <a th:href="@{/category/delete/{id}(id=${category.getId()})}">Удалить</a>
+            </p>
+            <p th:unless="${category.getProducts().isEmpty()}">
+                <em>Для удаления категории, необходимо удалить все товары из неё</em>
+            </p>
 
-    <div th:if="${category.getProducts().size() > 0}">
-        <h3>Товары в категории:</h3>
-        <div class="goods-list">
-            <div th:each="product : ${category.getProducts()}">
-                <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-                <br>
-                <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
-                <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-
-                <p class="add-to-cart" sec:authorize="hasRole('USER')">
-                    <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
-                </p>
-            </div>
         </div>
 
-    </div>
+        <div th:if="${category.getProducts().size() > 0}">
+            <h3>Товары в категории:</h3>
+            <div class="goods-list">
+                <div th:each="product : ${category.getProducts()}">
+                    <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
+                    <br>
+                    <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+                    <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+
+                    <p class="add-to-cart" sec:authorize="hasRole('USER')">
+                        <a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>

@@ -7,40 +7,56 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
-
-    <form sec:authorize="hasRole('ADMIN')" th:action="@{/order/{id}(id=${order.getNumber()})}" th:method="POST">
-        <label for="status"> Статус:</label>
-        <select id="status" name="status">
-            <option
-              th:each="s: ${statuses}"
-              th:value="${s.getId()}"
-              th:text="${s.getName()}"
-              th:selected="${order.status == s}"
-            >
-            </option>
-        </select>
-
-        <button type="submit">Изменить</button>
-    </form>
-
-    <p sec:authorize="isAnonymous()||hasRole('USER')" th:text="'Cтатус: ' + ${order.getStatus().getName()}">
-    <p sec:authorize="hasRole('ADMIN')" th:text="'Пользователь: ' + ${order.getPerson().getLogin()}">
-    <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
-    <p th:text="'Сумма заказа: ' + ${order.getTotalPrice()}"></p>
-
-    <div class="goods-list">
-        <div th:each="item: ${order.getItems()}" th:with="product=${item.getProduct()}">
-            <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px"><br>
-            <span th:text="'Наименование: ' + ${product.getTitle()}"></span><br>
-            <span th:text="'Количество: ' + ${item.getCount()}"></span><br>
-            <span th:text="'Цена: ' + ${item.getPrice()}"></span>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/orders}">Вернутся к списку заказов</a></li>
+                    <li><a th:href="@{/}">Вернутся назад</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <ul>
-        <li><a th:href="@{/orders}">Вернутся к списку заказов</a></li>
-        <li><a th:href="@{/}">Вернутся назад</a></li>
-    </ul>
+    <main>
+        <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
+
+        <form sec:authorize="hasRole('ADMIN')" th:action="@{/order/{id}(id=${order.getNumber()})}" th:method="POST">
+            <label for="status"> Статус:</label>
+            <select id="status" name="status">
+                <option
+                  th:each="s: ${statuses}"
+                  th:value="${s.getId()}"
+                  th:text="${s.getName()}"
+                  th:selected="${order.status == s}"
+                >
+                </option>
+            </select>
+
+            <button type="submit">Изменить</button>
+        </form>
+
+        <p sec:authorize="isAnonymous()||hasRole('USER')" th:text="'Cтатус: ' + ${order.getStatus().getName()}">
+        <p sec:authorize="hasRole('ADMIN')" th:text="'Пользователь: ' + ${order.getPerson().getLogin()}">
+        <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
+        <p th:text="'Сумма заказа: ' + ${order.getTotalPrice()}"></p>
+
+        <div class="goods-list">
+            <div th:each="item: ${order.getItems()}" th:with="product=${item.getProduct()}">
+                <img th:src="'/img/' + ${product.getImageList()[0].getFileName()}" width="300px"><br>
+                <strong th:text="${product.getTitle()}"></strong><br>
+                <span th:text="'Количество: ' + ${item.getCount()}"></span><br>
+                <span th:text="'Цена: ' + ${item.getPrice()}"></span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>

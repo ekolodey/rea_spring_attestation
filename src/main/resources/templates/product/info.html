@@ -11,36 +11,51 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <h3>Информация о товаре: </h3>
-    <dl>
-        <dt>Наименование</dt>
-        <dd th:text="${product.getTitle()}"></dd>
-        <dt>Описание</dt>
-        <dd th:text="${product.getDescription()}"></dd>
-        <dt>Цена</dt>
-        <dd th:text="${product.getPrice()}"></dd>
-        <dt>Cклад</dt>
-        <dd th:text="${product.getWarehouse()}"></dd>
-        <dt>Продавец</dt>
-        <dd th:text="${product.getSeller()}"></dd>
-        <dt>Категория</dt>
-        <dd th:text="${product.getCategory().getName()}"></dd>
-    </dl>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/products}">Вернутся к списку товаров</a></li>
+                    <li><a th:href="@{/}">Вернутся назад</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <div th:each="img : ${product.getImageList()}">
-        <img th:src="'/img/' + ${img.getFileName()}" style="width: 200px">
-    </div>
+    <main>
+        <h3>Информация о товаре: </h3>
+        <dl>
+            <dt>Наименование</dt>
+            <dd th:text="${product.getTitle()}"></dd>
+            <dt>Описание</dt>
+            <dd th:text="${product.getDescription()}"></dd>
+            <dt>Цена</dt>
+            <dd th:text="${product.getPrice()}"></dd>
+            <dt>Cклад</dt>
+            <dd th:text="${product.getWarehouse()}"></dd>
+            <dt>Продавец</dt>
+            <dd th:text="${product.getSeller()}"></dd>
+            <dt>Категория</dt>
+            <dd th:text="${product.getCategory().getName()}"></dd>
+        </dl>
 
-    <ul>
-        <li sec:authorize="hasRole('USER')" ><a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a></li>
-        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/product/edit/{id}(id=${product.getId()})}">Изменить</a></li>
-        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/product/delete/{id}(id=${product.getId()})}">Удалить</a></li>
-        <li><a th:href="@{/products}">Вернутся к списку товаров</a></li>
-        <li><a th:href="@{/}">Вернутся назад</a></li>
-    </ul>
+        <div class="goods-list">
+            <img th:each="img : ${product.getImageList()}" th:src="'/img/' + ${img.getFileName()}" style="width: 200px">
+        </div>
 
-    <ul >
+        <ul>
+            <li sec:authorize="hasRole('USER')" ><a th:href="@{/cart/add/{id}(id=${product.getId()})}">Добавить в корзину</a></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/product/edit/{id}(id=${product.getId()})}">Изменить</a></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/product/delete/{id}(id=${product.getId()})}">Удалить</a></li>
+        </ul>
+    </main>
 
-    </ul>
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>

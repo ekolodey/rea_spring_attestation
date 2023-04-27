@@ -7,14 +7,35 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-<h3>Создание категории</h3>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}">Вернутся на главную</a></li>
+                    <li><a th:href="@{/categories}">Вернутся в список категорий</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <h3>Создание категории</h3>
 
-<form th:method="POST" th:object="${category}" th:action="@{/category/edit}" >
-    <input type="hidden" th:field="*{id}">
-    <label for="name">Название категории: </label>
-    <input type="text" th:field="*{name}" placeholder="Название" id="name">
+        <form th:method="POST" th:object="${category}" th:action="@{/category/edit}" >
+            <input type="hidden" th:field="*{id}">
+            <label for="name">Название категории: </label>
+            <input type="text" th:field="*{name}" placeholder="Название" id="name">
 
-    <button type="submit">Отредактировать</button>
-</form>
+            <button type="submit">Отредактировать</button>
+        </form>
+    </main>
+
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>

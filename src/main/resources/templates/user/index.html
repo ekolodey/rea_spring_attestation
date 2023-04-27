@@ -7,17 +7,35 @@
     <link th:href="@{/css/index.css}" type="text/css" rel="stylesheet">
 </head>
 <body>
-    <form id="logout-form" method="post" action="/logout">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-    </form>
-    <h1>Личный кабинет пользователя</h1>
+    <header>
+        <div class="flex-between">
+            <a th:href="@{/}"><img th:src="@{/images/logo.svg}"></a>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="document.getElementById('logout-form').submit();">Выйти из личного кабинета</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <form id="logout-form" method="post" action="/logout">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        </form>
+        <h1>Личный кабинет пользователя</h1>
 
-    <ul>
-        <li><a th:href="@{/products}">Товары</a></li>
-        <li><a th:href="@{/categories}">Категории товаров</a></li>
-        <li><a th:href="@{/cart}">Корзина</a></li>
-        <li><a th:href="@{/orders}">Заказы</a></li>
-        <li><a href="#" onclick="document.getElementById('logout-form').submit();">Выйти из личного кабинета</a></li>
-    </ul>
+        <ul>
+            <li><a th:href="@{/products}">Товары</a></li>
+            <li><a th:href="@{/categories}">Категории товаров</a></li>
+            <li><a th:href="@{/cart}">Корзина</a></li>
+            <li><a th:href="@{/orders}">Заказы</a></li>
+        </ul>
+    </main>
+
+    <footer>
+        <div class="flex-between">
+            <div class="tagline"><img th:src="@{/images/icon.svg}"><span>Book Store - весь мир на книжной полке!</span></div>
+            <div class="social-icons"><a href="#"><img th:src="@{/images/social-icons.svg}"></a></div>
+        </div>
+    </footer>
 </body>
 </html>
